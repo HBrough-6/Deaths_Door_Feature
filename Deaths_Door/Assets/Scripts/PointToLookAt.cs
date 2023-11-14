@@ -4,13 +4,22 @@ using UnityEngine;
 
 // Brough, Heath
 // Created 11/13/23
-// last modified 11/13/23
+// last modified 11/14/23
 // moves an object around the game based on where the mouse is on the screen
+
+/// <summary>
+/// To do:
+/// 
+/// Bugs:
+/// look point is restricted to a maximum but will not heed the minimum restraint
+/// </summary>
 
 public class PointToLookAt : MonoBehaviour
 {
     public Vector3 worldPosition;
     public Vector3 screenPostion;
+
+    public Vector3 playerPos;
 
     // Plane used for finding the position on screen to look at
     Plane plane = new Plane(Vector3.down, 1.5f);
@@ -29,6 +38,25 @@ public class PointToLookAt : MonoBehaviour
             worldPosition = ray.GetPoint(distance);
         }
 
-        transform.position = worldPosition;
+        // find the delta from the launchpos to the mousPos3D
+        Vector3 mouseDelta = worldPosition - new Vector3(playerPos.x, 0, playerPos.z);
+
+        // Limit mouseDelta to radious of slingshot sphere collider
+        float maxMagnitude = 5;
+        float minMagnitude = 4;
+        if (mouseDelta.magnitude > maxMagnitude)
+        {
+            mouseDelta.Normalize();
+            mouseDelta *= maxMagnitude;
+        }
+        else if (mouseDelta.magnitude < minMagnitude)
+        {
+            mouseDelta.Normalize();
+            mouseDelta *= minMagnitude;
+        }
+
+        mouseDelta = new Vector3(mouseDelta.x, 1.5f, mouseDelta.z);
+
+        transform.position = mouseDelta;
     }
 }

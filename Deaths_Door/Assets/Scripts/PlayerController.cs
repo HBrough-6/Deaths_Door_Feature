@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    static public PlayerController Instance;
 
     private Transform objectToLookAt;
     private Vector3 posToLookAt;
@@ -16,11 +17,17 @@ public class PlayerController : MonoBehaviour
     // used to look at the mouse position
     private Transform playerRotStorageRef;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         objectToLookAt = GameObject.Find("PointToLookAt").transform;
         playerRotStorageRef = GameObject.Find("playerRotatorStorage").transform;
+        Instance = this;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
