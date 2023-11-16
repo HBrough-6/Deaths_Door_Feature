@@ -49,14 +49,18 @@ public class PointToLookAt : MonoBehaviour
             mouseDelta.Normalize();
             mouseDelta *= maxMagnitude;
         }
-        else if (mouseDelta.magnitude < minMagnitude)
-        {
-            mouseDelta.Normalize();
-            mouseDelta *= minMagnitude;
-        }
 
         mouseDelta = new Vector3(mouseDelta.x, 1.5f, mouseDelta.z);
-
         transform.position = mouseDelta;
+
+        if (Vector3.Distance(playerPos, transform.position) < minMagnitude)
+        {
+            // mouseDelta.Normalize();
+            //  mouseDelta *= minMagnitude;
+            Debug.Log("too close");
+            Vector3 direction = transform.position - playerPos;
+            transform.position = direction.normalized * minMagnitude;
+        }
+        // Debug.Log(mouseDelta);
     }
 }
