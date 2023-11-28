@@ -22,13 +22,17 @@ public class PlayerController : MonoBehaviour
     public GameObject ArrowPrefab;
     public GameObject FireballPrefab;
 
+    // player body reference
+    private GameObject playerBody;
+
     // used to look at the mouse position
-    private Transform playerRotStorageRef;
+    private Transform playerRotationReference;
 
     private void Awake()
     {
         objectToLookAt = GameObject.Find("PointToLookAt").transform;
-        playerRotStorageRef = GameObject.Find("playerRotatorStorage").transform;
+        playerRotationReference = GameObject.Find("playerRotatorStorage").transform;
+        playerBody = GameObject.Find("PlayerContainer").gameObject;
         Instance = this;
 
         currentProjectile = FireArrow;
@@ -43,9 +47,20 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        rotatePlayer();
+    }
+
+    private void rotatePlayer()
+    {
         posToLookAt = new Vector3(objectToLookAt.position.x, 1.5f, objectToLookAt.position.z);
         // playerRotStorageRef.LookAt(posToLookAt);
         transform.LookAt(posToLookAt);
+
+
+        // just take the y rotation of the rotation reference
+        // playerBody.transform.Rotate();
+        // playerBody.transform.rotation.eulerAngles = new Vector3(0, playerRotationReference.transform.rotation.y, 0);
+        // playerBody.transform.rotation.eu
     }
 
     // shoots the current projectile

@@ -60,6 +60,7 @@ public class PointToLookAt : MonoBehaviour
             Debug.Log("too close");
             Vector3 direction = transform.position - playerPos;
             transform.position = direction.normalized * minMagnitude;
+            transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
         }
         // Debug.Log(mouseDelta);
     }
