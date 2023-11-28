@@ -40,7 +40,7 @@ public class PointToLookAt : MonoBehaviour
 
         // find the delta from the launchpos to the mousPos3D
         Vector3 mouseDelta = worldPosition - new Vector3(playerPos.x, 0, playerPos.z);
-
+/*
         // Limit mouseDelta to radious of slingshot sphere collider
         float maxMagnitude = 5;
         float minMagnitude = 4;
@@ -49,10 +49,10 @@ public class PointToLookAt : MonoBehaviour
             mouseDelta.Normalize();
             mouseDelta *= maxMagnitude;
         }
-
+*/
         mouseDelta = new Vector3(mouseDelta.x, 1.5f, mouseDelta.z);
         transform.position = mouseDelta;
-
+/*
         if (Vector3.Distance(playerPos, transform.position) < minMagnitude)
         {
             // mouseDelta.Normalize();
@@ -63,5 +63,6 @@ public class PointToLookAt : MonoBehaviour
             transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
         }
         // Debug.Log(mouseDelta);
+*/
     }
 }
