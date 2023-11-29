@@ -55,7 +55,8 @@ public class PlayerController : MonoBehaviour
     // shoots the current projectile
     public void shootProjectile()
     {
-        currentProjectile();
+        // currentProjectile();
+        Debug.Log("Fired");
     }
 
     // shoots an arrow
