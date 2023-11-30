@@ -11,26 +11,39 @@ public class Projectile : MonoBehaviour
     protected float assistDist;
     protected float assistWidth;
 
+    // how far away the projectile can be from the starting point
+    protected float MaxDistAway = 10;
+
+    // the starting position of the projectile
+    protected Vector3 startPos;
+
+    // how much damage the projectile does
     protected int damage;
 
-    // intial rotation
-    protected Quaternion rotation;
+
     // Start is called before the first frame update
     void Start()
     {
         // set the rotation equal to the players rotation on creation
         transform.rotation = PlayerController.Instance.transform.rotation;
+
+        startPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Move();
     }
 
     protected virtual void Move()
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        if ((startPos-transform.position).magnitude > MaxDistAway)
+        {
+            Debug.Log("destroyed projectile");
+            Destroy(this.gameObject);
+        }
     }
 
 
@@ -38,8 +51,13 @@ public class Projectile : MonoBehaviour
     {
         if (collision.transform.CompareTag("Enemy"))
         {
-            collision.transform.GetComponent<Enemy>().TakeDamage(damage);
+            OnHit(collision);
             // deal damage
         }
+    }
+
+    protected virtual void OnHit(Collision collision)
+    {
+        collision.transform.GetComponent<Enemy>().TakeDamage(damage);
     }
 }

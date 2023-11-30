@@ -81,6 +81,10 @@ public class PlayerController : MonoBehaviour
             // enter shooting mode
             inShootingMode = true;
             Debug.Log("entered shooting mode");
+            // disable the melee attack when the player enters shooting mode
+            inputActions.Player.Attack.Disable();
+            // disable movement in shootig mode
+            inputActions.Player.Move.Disable();
         }
 
         // player released space
@@ -90,21 +94,18 @@ public class PlayerController : MonoBehaviour
             inShootingMode = false;
             canShoot = false;
             Debug.Log("exited shooting mode");
+            inputActions.Player.Attack.Enable();
+            inputActions.Player.Move.Enable();
         }
     }
 
-
-
-
-
-
-
-
-
-    // shoots the current projectile
-    // 
+    /// <summary>
+    /// shoots if the player holds down the left mouse button down for the required duration 
+    /// </summary>
+    /// <param name="context"></param>
     public void Attack(InputAction.CallbackContext context)
     {
+        Debug.Log("work");
         if (inShootingMode)
         {
             if (context.performed)
@@ -114,15 +115,13 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("attack ready");
             }
         
-            if (context.canceled && inShootingMode)
+            if (context.canceled && inShootingMode && canShoot)
             {
                 // player released the button after charging attack
                 canShoot = false;
                 Debug.Log("Attack Released");
             }
         }
-
-        //  StartCoroutine(ChargeToShoot(context));
     }
 
     // shoots an arrow

@@ -53,6 +53,15 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""10ad8743-2800-4e44-afff-f87c718eb88d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -174,6 +183,17 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""EnterShootingMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8172379a-9475-4ed1-a1a3-bdd405a2b62f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Tap(duration=0.2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -764,6 +784,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_EnterShootingMode = m_Player.FindAction("EnterShootingMode", throwIfNotFound: true);
+        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -840,6 +861,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_EnterShootingMode;
+    private readonly InputAction m_Player_Attack;
     public struct PlayerActions
     {
         private @Deaths_Door m_Wrapper;
@@ -847,6 +869,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @EnterShootingMode => m_Wrapper.m_Player_EnterShootingMode;
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -865,6 +888,9 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @EnterShootingMode.started += instance.OnEnterShootingMode;
             @EnterShootingMode.performed += instance.OnEnterShootingMode;
             @EnterShootingMode.canceled += instance.OnEnterShootingMode;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -878,6 +904,9 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @EnterShootingMode.started -= instance.OnEnterShootingMode;
             @EnterShootingMode.performed -= instance.OnEnterShootingMode;
             @EnterShootingMode.canceled -= instance.OnEnterShootingMode;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1063,6 +1092,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnEnterShootingMode(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
