@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "EnterShootingMode",
+                    "type": "Button",
+                    "id": "b2dcb3e7-abe2-4fb4-a4a5-3e75df24e27a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -126,12 +135,23 @@
                 },
                 {
                     "name": "",
-                    "id": "272d6a42-d4a8-4a38-b866-013c61ced516",
+                    "id": "08687ef5-9cb8-49b8-957f-33034741049d",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Hold(duration=1)",
                     "processors": "",
                     "groups": "",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75400633-5510-4a5d-8274-e1d2521514ae",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EnterShootingMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

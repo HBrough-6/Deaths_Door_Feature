@@ -44,6 +44,15 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnterShootingMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""b2dcb3e7-abe2-4fb4-a4a5-3e75df24e27a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -148,12 +157,23 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""272d6a42-d4a8-4a38-b866-013c61ced516"",
+                    ""id"": ""08687ef5-9cb8-49b8-957f-33034741049d"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75400633-5510-4a5d-8274-e1d2521514ae"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnterShootingMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -743,6 +763,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_EnterShootingMode = m_Player.FindAction("EnterShootingMode", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -818,12 +839,14 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_EnterShootingMode;
     public struct PlayerActions
     {
         private @Deaths_Door m_Wrapper;
         public PlayerActions(@Deaths_Door wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @EnterShootingMode => m_Wrapper.m_Player_EnterShootingMode;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -839,6 +862,9 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @EnterShootingMode.started += instance.OnEnterShootingMode;
+            @EnterShootingMode.performed += instance.OnEnterShootingMode;
+            @EnterShootingMode.canceled += instance.OnEnterShootingMode;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -849,6 +875,9 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @EnterShootingMode.started -= instance.OnEnterShootingMode;
+            @EnterShootingMode.performed -= instance.OnEnterShootingMode;
+            @EnterShootingMode.canceled -= instance.OnEnterShootingMode;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1033,6 +1062,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnEnterShootingMode(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

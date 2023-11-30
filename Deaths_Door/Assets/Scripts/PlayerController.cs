@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 // Brough, Heath
 // Created 11/9/23
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 posToLookAt;
     public Quaternion ChildRot;
 
+    Deaths_Door inputActions;
+
     // delegates
     delegate void ProjectileType();
     ProjectileType currentProjectile;
@@ -22,9 +25,20 @@ public class PlayerController : MonoBehaviour
     public GameObject ArrowPrefab;
     public GameObject FireballPrefab;
 
+    // how long the player has to hold down the mouse to shoot
+    private float currentShootDelay;
+
+    //if the player is in shooting mode
+    private bool inShootingMode = false;
+
+    // if the player can shoot
+    private bool canShoot = false;
 
     private void Awake()
     {
+        inputActions = new Deaths_Door();
+        inputActions.Enable();
+
         objectToLookAt = GameObject.Find("PointToLookAt").transform;
         Instance = this;
 
@@ -52,11 +66,63 @@ public class PlayerController : MonoBehaviour
         transform.LookAt(posToLookAt);
     }
 
-    // shoots the current projectile
-    public void shootProjectile()
+    // player enters shooting mode
+    // player holds down mouse to charge up shot
+    // on release of mouse, shoot projectile
+    // or on the release of the shooting mode button cancel the shot
+
+    // enter shooting mode by pressing and holding space
+    // on release, player leaves shooting mode
+    public void enterShootingMode(InputAction.CallbackContext context)
     {
-        // currentProjectile();
-        Debug.Log("Fired");
+        // player pressed space
+        if (context.started)
+        {
+            // enter shooting mode
+            inShootingMode = true;
+            Debug.Log("entered shooting mode");
+        }
+
+        // player released space
+        if (context.canceled)
+        {
+            // exit shooting mode and ensure the player cannot shoot
+            inShootingMode = false;
+            canShoot = false;
+            Debug.Log("exited shooting mode");
+        }
+    }
+
+
+
+
+
+
+
+
+
+    // shoots the current projectile
+    // 
+    public void Attack(InputAction.CallbackContext context)
+    {
+        if (inShootingMode)
+        {
+            if (context.performed)
+            {
+                // player successfully held down button for long enough and attack is ready
+                canShoot = true;
+                Debug.Log("attack ready");
+            }
+        
+            if (context.canceled && inShootingMode)
+            {
+                // player released the button after charging attack
+                canShoot = false;
+                Debug.Log("Attack Released");
+            }
+        }
+
+        //  StartCoroutine(ChargeToShoot(context));
     }
 
     // shoots an arrow
