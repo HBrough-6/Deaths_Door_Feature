@@ -15,9 +15,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Fire",
+                    "name": "MeleeAttack",
                     "type": "Button",
-                    "id": "aed5af9b-b298-45d0-bc77-cd8a384fc968",
+                    "id": "42876518-d3d1-4dca-9e85-af20f0d99674",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -33,9 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Attack",
+                    "name": "EquipArrow",
                     "type": "Button",
-                    "id": "10ad8743-2800-4e44-afff-f87c718eb88d",
+                    "id": "837a4b1e-1803-46cd-a32d-bb184de3cc36",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EquipFireBall",
+                    "type": "Button",
+                    "id": "55afb112-b413-4a13-ae88-785a4abb8ed2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -144,17 +153,6 @@
                 },
                 {
                     "name": "",
-                    "id": "08687ef5-9cb8-49b8-957f-33034741049d",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "Hold(duration=1)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "75400633-5510-4a5d-8274-e1d2521514ae",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -166,12 +164,34 @@
                 },
                 {
                     "name": "",
-                    "id": "8172379a-9475-4ed1-a1a3-bdd405a2b62f",
+                    "id": "5ef6c730-cccf-4032-9965-ccfc2c884cb4",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EquipArrow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "205049cb-aee4-4868-82b6-1ae9a137dc5d",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EquipFireBall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "924c78c5-deda-4a93-a42e-0ad38c1ee9b8",
                     "path": "<Mouse>/leftButton",
                     "interactions": "Tap(duration=0.2)",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "MeleeAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -688,6 +708,54 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Shooting",
+            "id": "3b447932-700d-4c15-bf75-1d12ad4bfca6",
+            "actions": [
+                {
+                    "name": "FireArrow",
+                    "type": "Button",
+                    "id": "5f35b730-1956-4310-94c1-dfa107b71f6b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FireFireBall",
+                    "type": "Button",
+                    "id": "5595ac06-6730-4c35-8d59-baf49730d2b3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f78b5854-9afe-4629-b5ab-84c4501420d6",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold(duration=10)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireFireBall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4851e058-e5bb-4281-9356-34a4921aad9f",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold(duration=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireArrow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

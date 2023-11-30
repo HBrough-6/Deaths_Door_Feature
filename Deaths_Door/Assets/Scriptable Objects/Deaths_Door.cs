@@ -37,9 +37,9 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Fire"",
+                    ""name"": ""MeleeAttack"",
                     ""type"": ""Button"",
-                    ""id"": ""aed5af9b-b298-45d0-bc77-cd8a384fc968"",
+                    ""id"": ""42876518-d3d1-4dca-9e85-af20f0d99674"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -55,9 +55,18 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""EquipArrow"",
                     ""type"": ""Button"",
-                    ""id"": ""10ad8743-2800-4e44-afff-f87c718eb88d"",
+                    ""id"": ""837a4b1e-1803-46cd-a32d-bb184de3cc36"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EquipFireBall"",
+                    ""type"": ""Button"",
+                    ""id"": ""55afb112-b413-4a13-ae88-785a4abb8ed2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -166,17 +175,6 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""08687ef5-9cb8-49b8-957f-33034741049d"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Hold(duration=1)"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Fire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""75400633-5510-4a5d-8274-e1d2521514ae"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -188,12 +186,34 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8172379a-9475-4ed1-a1a3-bdd405a2b62f"",
+                    ""id"": ""5ef6c730-cccf-4032-9965-ccfc2c884cb4"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EquipArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""205049cb-aee4-4868-82b6-1ae9a137dc5d"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EquipFireBall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""924c78c5-deda-4a93-a42e-0ad38c1ee9b8"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": ""Tap(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""MeleeAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -714,6 +734,54 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Shooting"",
+            ""id"": ""3b447932-700d-4c15-bf75-1d12ad4bfca6"",
+            ""actions"": [
+                {
+                    ""name"": ""FireArrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""5f35b730-1956-4310-94c1-dfa107b71f6b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FireFireBall"",
+                    ""type"": ""Button"",
+                    ""id"": ""5595ac06-6730-4c35-8d59-baf49730d2b3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f78b5854-9afe-4629-b5ab-84c4501420d6"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Hold(duration=10)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireFireBall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4851e058-e5bb-4281-9356-34a4921aad9f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Hold(duration=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -782,9 +850,10 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_MeleeAttack = m_Player.FindAction("MeleeAttack", throwIfNotFound: true);
         m_Player_EnterShootingMode = m_Player.FindAction("EnterShootingMode", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_EquipArrow = m_Player.FindAction("EquipArrow", throwIfNotFound: true);
+        m_Player_EquipFireBall = m_Player.FindAction("EquipFireBall", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -797,6 +866,10 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // Shooting
+        m_Shooting = asset.FindActionMap("Shooting", throwIfNotFound: true);
+        m_Shooting_FireArrow = m_Shooting.FindAction("FireArrow", throwIfNotFound: true);
+        m_Shooting_FireFireBall = m_Shooting.FindAction("FireFireBall", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -859,17 +932,19 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_MeleeAttack;
     private readonly InputAction m_Player_EnterShootingMode;
-    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_EquipArrow;
+    private readonly InputAction m_Player_EquipFireBall;
     public struct PlayerActions
     {
         private @Deaths_Door m_Wrapper;
         public PlayerActions(@Deaths_Door wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @MeleeAttack => m_Wrapper.m_Player_MeleeAttack;
         public InputAction @EnterShootingMode => m_Wrapper.m_Player_EnterShootingMode;
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @EquipArrow => m_Wrapper.m_Player_EquipArrow;
+        public InputAction @EquipFireBall => m_Wrapper.m_Player_EquipFireBall;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -882,15 +957,18 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Fire.started += instance.OnFire;
-            @Fire.performed += instance.OnFire;
-            @Fire.canceled += instance.OnFire;
+            @MeleeAttack.started += instance.OnMeleeAttack;
+            @MeleeAttack.performed += instance.OnMeleeAttack;
+            @MeleeAttack.canceled += instance.OnMeleeAttack;
             @EnterShootingMode.started += instance.OnEnterShootingMode;
             @EnterShootingMode.performed += instance.OnEnterShootingMode;
             @EnterShootingMode.canceled += instance.OnEnterShootingMode;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @EquipArrow.started += instance.OnEquipArrow;
+            @EquipArrow.performed += instance.OnEquipArrow;
+            @EquipArrow.canceled += instance.OnEquipArrow;
+            @EquipFireBall.started += instance.OnEquipFireBall;
+            @EquipFireBall.performed += instance.OnEquipFireBall;
+            @EquipFireBall.canceled += instance.OnEquipFireBall;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -898,15 +976,18 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Fire.started -= instance.OnFire;
-            @Fire.performed -= instance.OnFire;
-            @Fire.canceled -= instance.OnFire;
+            @MeleeAttack.started -= instance.OnMeleeAttack;
+            @MeleeAttack.performed -= instance.OnMeleeAttack;
+            @MeleeAttack.canceled -= instance.OnMeleeAttack;
             @EnterShootingMode.started -= instance.OnEnterShootingMode;
             @EnterShootingMode.performed -= instance.OnEnterShootingMode;
             @EnterShootingMode.canceled -= instance.OnEnterShootingMode;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @EquipArrow.started -= instance.OnEquipArrow;
+            @EquipArrow.performed -= instance.OnEquipArrow;
+            @EquipArrow.canceled -= instance.OnEquipArrow;
+            @EquipFireBall.started -= instance.OnEquipFireBall;
+            @EquipFireBall.performed -= instance.OnEquipFireBall;
+            @EquipFireBall.canceled -= instance.OnEquipFireBall;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1042,6 +1123,60 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Shooting
+    private readonly InputActionMap m_Shooting;
+    private List<IShootingActions> m_ShootingActionsCallbackInterfaces = new List<IShootingActions>();
+    private readonly InputAction m_Shooting_FireArrow;
+    private readonly InputAction m_Shooting_FireFireBall;
+    public struct ShootingActions
+    {
+        private @Deaths_Door m_Wrapper;
+        public ShootingActions(@Deaths_Door wrapper) { m_Wrapper = wrapper; }
+        public InputAction @FireArrow => m_Wrapper.m_Shooting_FireArrow;
+        public InputAction @FireFireBall => m_Wrapper.m_Shooting_FireFireBall;
+        public InputActionMap Get() { return m_Wrapper.m_Shooting; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ShootingActions set) { return set.Get(); }
+        public void AddCallbacks(IShootingActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ShootingActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ShootingActionsCallbackInterfaces.Add(instance);
+            @FireArrow.started += instance.OnFireArrow;
+            @FireArrow.performed += instance.OnFireArrow;
+            @FireArrow.canceled += instance.OnFireArrow;
+            @FireFireBall.started += instance.OnFireFireBall;
+            @FireFireBall.performed += instance.OnFireFireBall;
+            @FireFireBall.canceled += instance.OnFireFireBall;
+        }
+
+        private void UnregisterCallbacks(IShootingActions instance)
+        {
+            @FireArrow.started -= instance.OnFireArrow;
+            @FireArrow.performed -= instance.OnFireArrow;
+            @FireArrow.canceled -= instance.OnFireArrow;
+            @FireFireBall.started -= instance.OnFireFireBall;
+            @FireFireBall.performed -= instance.OnFireFireBall;
+            @FireFireBall.canceled -= instance.OnFireFireBall;
+        }
+
+        public void RemoveCallbacks(IShootingActions instance)
+        {
+            if (m_Wrapper.m_ShootingActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IShootingActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ShootingActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ShootingActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ShootingActions @Shooting => new ShootingActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1090,9 +1225,10 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnFire(InputAction.CallbackContext context);
+        void OnMeleeAttack(InputAction.CallbackContext context);
         void OnEnterShootingMode(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
+        void OnEquipArrow(InputAction.CallbackContext context);
+        void OnEquipFireBall(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1106,5 +1242,10 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface IShootingActions
+    {
+        void OnFireArrow(InputAction.CallbackContext context);
+        void OnFireFireBall(InputAction.CallbackContext context);
     }
 }
