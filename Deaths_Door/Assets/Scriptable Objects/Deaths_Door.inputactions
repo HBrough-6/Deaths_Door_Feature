@@ -714,22 +714,13 @@
             ]
         },
         {
-            "name": "Shooting",
-            "id": "3b447932-700d-4c15-bf75-1d12ad4bfca6",
+            "name": "Arrow",
+            "id": "ec626608-cfc9-4f12-9720-80947979f63b",
             "actions": [
                 {
                     "name": "FireArrow",
                     "type": "Button",
-                    "id": "5f35b730-1956-4310-94c1-dfa107b71f6b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FireFireBall",
-                    "type": "Button",
-                    "id": "5595ac06-6730-4c35-8d59-baf49730d2b3",
+                    "id": "4a4a065b-3992-45ee-98f6-39837f2f7d64",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -739,23 +730,40 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "f78b5854-9afe-4629-b5ab-84c4501420d6",
+                    "id": "773f2fc2-3391-425d-8f24-f77af86e034a",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "Hold(duration=10)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "FireFireBall",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4851e058-e5bb-4281-9356-34a4921aad9f",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "Hold(duration=2)",
+                    "interactions": "Hold(duration=0.35)",
                     "processors": "",
                     "groups": "",
                     "action": "FireArrow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "FireBall",
+            "id": "3b447932-700d-4c15-bf75-1d12ad4bfca6",
+            "actions": [
+                {
+                    "name": "FireFireBall",
+                    "type": "Button",
+                    "id": "1466024c-edc5-4bc5-b9c2-798d1208ee9f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9262e31e-36cc-42f1-b7d4-4dd88da73d67",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireFireBall",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

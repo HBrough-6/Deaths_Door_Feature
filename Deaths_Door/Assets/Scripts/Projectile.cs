@@ -7,12 +7,12 @@ using UnityEngine;
 // base class for projectiles
 public class Projectile : MonoBehaviour
 {
-    protected float speed;
+    protected float speed = 10;
     protected float assistDist;
     protected float assistWidth;
 
     // how far away the projectile can be from the starting point
-    protected float MaxDistAway = 10;
+    protected float MaxDistAway = 100;
 
     // the starting position of the projectile
     protected Vector3 startPos;
@@ -51,13 +51,16 @@ public class Projectile : MonoBehaviour
     {
         if (collision.transform.CompareTag("Enemy"))
         {
-            OnHit(collision);
+            OnHit();
+
             // deal damage
         }
     }
 
-    protected virtual void OnHit(Collision collision)
+    public virtual void OnHit()
     {
-        collision.transform.GetComponent<Enemy>().TakeDamage(damage);
+        Debug.Log("hit an enemy");
+        Destroy(this.gameObject);
+
     }
 }

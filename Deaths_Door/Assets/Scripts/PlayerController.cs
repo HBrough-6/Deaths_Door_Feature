@@ -6,12 +6,18 @@ using UnityEngine.InputSystem;
 
 // Brough, Heath
 // Created 11/9/23
-// last modified 11/13/23
+// last modified 12/1/23
+// handles the movement, shooting, and melee attacks of the player
+
+/*
+ BUGS:
+    Swapping projectiles in the middle of shooting mode will disable both projectiles
+ */
 
 enum AttackType
 {
     Empty = -1,
-    Arrow,
+    Arrow = 2,
     Fireball
     
 }
@@ -44,7 +50,7 @@ public class PlayerController : MonoBehaviour
     private bool meleeCharged = false;
 
     // tracks the last equipped projectile type
-    AttackType lastAttack = AttackType.Empty;
+    AttackType activeSpell = AttackType.Empty;
 
     // actions reference
     private Component playerInputComponent;
@@ -57,11 +63,15 @@ public class PlayerController : MonoBehaviour
         // GetComponent<PlayerInput>().actions.actionMaps[0].actions[0].Disable();
 
         // disables shooting when the game starts
-        GetComponent<PlayerInput>().actions.actionMaps[2].Disable();
+        GetComponent<PlayerInput>().actions.actionMaps[(int)AttackType.Arrow].Disable();
+        GetComponent<PlayerInput>().actions.actionMaps[(int)AttackType.Fireball].Disable();
         objectToLookAt = GameObject.Find("PointToLookAt").transform;
         Instance = this;
 
+
+        // equips arrow as the first projectile
         currentSpell = FireArrow;
+        activeSpell = AttackType.Arrow;
     }
 
     // Start is called before the first frame update
@@ -98,7 +108,7 @@ public class PlayerController : MonoBehaviour
         if (context.started)
         {
             // enable shooting
-            GetComponent<PlayerInput>().actions.actionMaps[2].Enable();
+            GetComponent<PlayerInput>().actions.actionMaps[(int)activeSpell].Enable();
             // disable attacking
             GetComponent<PlayerInput>().actions.actionMaps[0].actions[1].Disable();
             // disable movement 
@@ -118,7 +128,7 @@ public class PlayerController : MonoBehaviour
             canShoot = false;
             Debug.Log("exited shooting mode");
             // disable shooting
-            GetComponent<PlayerInput>().actions.actionMaps[2].Disable();
+            GetComponent<PlayerInput>().actions.actionMaps[(int)activeSpell].Disable();
             // Enable attacking
             GetComponent<PlayerInput>().actions.actionMaps[0].actions[1].Enable();
             // Enable movement 
@@ -167,11 +177,10 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// disables the last projectile that was equipped, skipping the disable if there was no previous projectile (lastProj = -1)
     /// </summary>
-    private void DisableLastAttack()
+    private void DisableLastAttack(int toDisable)
     {
         // if there was no previous projectile equipped, skip disabling a projectile
-        if ((int)lastAttack == -1) return;
-        GetComponent<PlayerInput>().actions.actionMaps[2].actions[(int)lastAttack].Disable();
+        GetComponent<PlayerInput>().actions.actionMaps[toDisable].Disable();
     }
 
     /*
@@ -191,9 +200,9 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("equips arrow");
                 // disable the previous projectile type
-                DisableLastAttack();
+                DisableLastAttack((int)AttackType.Fireball);
                 currentSpell = FireArrow;
-                lastAttack = AttackType.Arrow;
+                activeSpell = AttackType.Arrow;
             }
             else Debug.Log("arrow already equipped");
         }
@@ -212,9 +221,9 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("equips fireball");
                 // disable the previous projectile type
-                DisableLastAttack();
+                DisableLastAttack((int)AttackType.Arrow);
                 currentSpell = FireFireball;
-                lastAttack = AttackType.Arrow;
+                activeSpell = AttackType.Fireball;
             }
             else Debug.Log("fireball already equipped");
         }
@@ -229,8 +238,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void FireArrow()
     {
+
         Debug.Log("shoots arrow");
-                    //Instantiate(ArrowPrefab, transform.position, transform.rotation);
+        Instantiate(ArrowPrefab, transform.position, transform.rotation);
     }
 
     /// <summary>
@@ -238,7 +248,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void FireFireball()
     {
-        Debug.Log("shoots fireball");
+            Debug.Log("shoots fireball"); 
                     //Instantiate(FireballPrefab, transform.position, transform.rotation);
     }
 

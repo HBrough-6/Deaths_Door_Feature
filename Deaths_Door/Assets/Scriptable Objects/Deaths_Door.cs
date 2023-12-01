@@ -736,22 +736,13 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Shooting"",
-            ""id"": ""3b447932-700d-4c15-bf75-1d12ad4bfca6"",
+            ""name"": ""Arrow"",
+            ""id"": ""ec626608-cfc9-4f12-9720-80947979f63b"",
             ""actions"": [
                 {
                     ""name"": ""FireArrow"",
                     ""type"": ""Button"",
-                    ""id"": ""5f35b730-1956-4310-94c1-dfa107b71f6b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FireFireBall"",
-                    ""type"": ""Button"",
-                    ""id"": ""5595ac06-6730-4c35-8d59-baf49730d2b3"",
+                    ""id"": ""4a4a065b-3992-45ee-98f6-39837f2f7d64"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -761,23 +752,40 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""f78b5854-9afe-4629-b5ab-84c4501420d6"",
+                    ""id"": ""773f2fc2-3391-425d-8f24-f77af86e034a"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Hold(duration=10)"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FireFireBall"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4851e058-e5bb-4281-9356-34a4921aad9f"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Hold(duration=2)"",
+                    ""interactions"": ""Hold(duration=0.35)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FireArrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""FireBall"",
+            ""id"": ""3b447932-700d-4c15-bf75-1d12ad4bfca6"",
+            ""actions"": [
+                {
+                    ""name"": ""FireFireBall"",
+                    ""type"": ""Button"",
+                    ""id"": ""1466024c-edc5-4bc5-b9c2-798d1208ee9f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""9262e31e-36cc-42f1-b7d4-4dd88da73d67"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Hold(duration=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireFireBall"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -866,10 +874,12 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-        // Shooting
-        m_Shooting = asset.FindActionMap("Shooting", throwIfNotFound: true);
-        m_Shooting_FireArrow = m_Shooting.FindAction("FireArrow", throwIfNotFound: true);
-        m_Shooting_FireFireBall = m_Shooting.FindAction("FireFireBall", throwIfNotFound: true);
+        // Arrow
+        m_Arrow = asset.FindActionMap("Arrow", throwIfNotFound: true);
+        m_Arrow_FireArrow = m_Arrow.FindAction("FireArrow", throwIfNotFound: true);
+        // FireBall
+        m_FireBall = asset.FindActionMap("FireBall", throwIfNotFound: true);
+        m_FireBall_FireFireBall = m_FireBall.FindAction("FireFireBall", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1124,59 +1134,97 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
     }
     public UIActions @UI => new UIActions(this);
 
-    // Shooting
-    private readonly InputActionMap m_Shooting;
-    private List<IShootingActions> m_ShootingActionsCallbackInterfaces = new List<IShootingActions>();
-    private readonly InputAction m_Shooting_FireArrow;
-    private readonly InputAction m_Shooting_FireFireBall;
-    public struct ShootingActions
+    // Arrow
+    private readonly InputActionMap m_Arrow;
+    private List<IArrowActions> m_ArrowActionsCallbackInterfaces = new List<IArrowActions>();
+    private readonly InputAction m_Arrow_FireArrow;
+    public struct ArrowActions
     {
         private @Deaths_Door m_Wrapper;
-        public ShootingActions(@Deaths_Door wrapper) { m_Wrapper = wrapper; }
-        public InputAction @FireArrow => m_Wrapper.m_Shooting_FireArrow;
-        public InputAction @FireFireBall => m_Wrapper.m_Shooting_FireFireBall;
-        public InputActionMap Get() { return m_Wrapper.m_Shooting; }
+        public ArrowActions(@Deaths_Door wrapper) { m_Wrapper = wrapper; }
+        public InputAction @FireArrow => m_Wrapper.m_Arrow_FireArrow;
+        public InputActionMap Get() { return m_Wrapper.m_Arrow; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ShootingActions set) { return set.Get(); }
-        public void AddCallbacks(IShootingActions instance)
+        public static implicit operator InputActionMap(ArrowActions set) { return set.Get(); }
+        public void AddCallbacks(IArrowActions instance)
         {
-            if (instance == null || m_Wrapper.m_ShootingActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_ShootingActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_ArrowActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ArrowActionsCallbackInterfaces.Add(instance);
             @FireArrow.started += instance.OnFireArrow;
             @FireArrow.performed += instance.OnFireArrow;
             @FireArrow.canceled += instance.OnFireArrow;
+        }
+
+        private void UnregisterCallbacks(IArrowActions instance)
+        {
+            @FireArrow.started -= instance.OnFireArrow;
+            @FireArrow.performed -= instance.OnFireArrow;
+            @FireArrow.canceled -= instance.OnFireArrow;
+        }
+
+        public void RemoveCallbacks(IArrowActions instance)
+        {
+            if (m_Wrapper.m_ArrowActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IArrowActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ArrowActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ArrowActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ArrowActions @Arrow => new ArrowActions(this);
+
+    // FireBall
+    private readonly InputActionMap m_FireBall;
+    private List<IFireBallActions> m_FireBallActionsCallbackInterfaces = new List<IFireBallActions>();
+    private readonly InputAction m_FireBall_FireFireBall;
+    public struct FireBallActions
+    {
+        private @Deaths_Door m_Wrapper;
+        public FireBallActions(@Deaths_Door wrapper) { m_Wrapper = wrapper; }
+        public InputAction @FireFireBall => m_Wrapper.m_FireBall_FireFireBall;
+        public InputActionMap Get() { return m_Wrapper.m_FireBall; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(FireBallActions set) { return set.Get(); }
+        public void AddCallbacks(IFireBallActions instance)
+        {
+            if (instance == null || m_Wrapper.m_FireBallActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_FireBallActionsCallbackInterfaces.Add(instance);
             @FireFireBall.started += instance.OnFireFireBall;
             @FireFireBall.performed += instance.OnFireFireBall;
             @FireFireBall.canceled += instance.OnFireFireBall;
         }
 
-        private void UnregisterCallbacks(IShootingActions instance)
+        private void UnregisterCallbacks(IFireBallActions instance)
         {
-            @FireArrow.started -= instance.OnFireArrow;
-            @FireArrow.performed -= instance.OnFireArrow;
-            @FireArrow.canceled -= instance.OnFireArrow;
             @FireFireBall.started -= instance.OnFireFireBall;
             @FireFireBall.performed -= instance.OnFireFireBall;
             @FireFireBall.canceled -= instance.OnFireFireBall;
         }
 
-        public void RemoveCallbacks(IShootingActions instance)
+        public void RemoveCallbacks(IFireBallActions instance)
         {
-            if (m_Wrapper.m_ShootingActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_FireBallActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IShootingActions instance)
+        public void SetCallbacks(IFireBallActions instance)
         {
-            foreach (var item in m_Wrapper.m_ShootingActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_FireBallActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_ShootingActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_FireBallActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public ShootingActions @Shooting => new ShootingActions(this);
+    public FireBallActions @FireBall => new FireBallActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1243,9 +1291,12 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
     }
-    public interface IShootingActions
+    public interface IArrowActions
     {
         void OnFireArrow(InputAction.CallbackContext context);
+    }
+    public interface IFireBallActions
+    {
         void OnFireFireBall(InputAction.CallbackContext context);
     }
 }

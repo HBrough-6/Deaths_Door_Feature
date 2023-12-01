@@ -18,4 +18,9 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        collision.transform.GetComponent<Projectile>().OnHit();
+    }
 }
