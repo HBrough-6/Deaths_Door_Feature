@@ -3,24 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Brough, Heath
-// 11/29/23
+// 12/6/23
 // simple enemy class that can take damage and die
 
 public class Enemy : MonoBehaviour
 {
-    int health;
+    [SerializeField]
+    private int health = 3;
 
     public void TakeDamage(int damage)
     {
         health -= damage;
         if (health <= 0)
         {
+            PlayerController.Instance.transform.Find("AimAssistCone").GetComponent<AimAssist>().IgnoreEnemy(this.gameObject);
             Destroy(this.gameObject);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        collision.transform.GetComponent<Projectile>().OnHit();
+        if (other.CompareTag("ExplosionRadius"))
+        {
+            TakeDamage(3);
+        }
     }
 }

@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Brough, Heath
-// 11/29/2023
+// 12/6/2023
 // base class for projectiles
 public class Projectile : MonoBehaviour
 {
+    [SerializeField]
     protected float speed = 10;
-    protected float assistDist;
-    protected float assistWidth;
 
+    [SerializeField]
     // how far away the projectile can be from the starting point
     protected float MaxDistAway = 100;
 
     // the starting position of the projectile
     protected Vector3 startPos;
 
+    [SerializeField]
     // how much damage the projectile does
     protected int damage;
 
@@ -24,9 +25,11 @@ public class Projectile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // set the rotation equal to the players rotation on creation
-        transform.rotation = PlayerController.Instance.transform.rotation;
-
+        // look at the closest enemy if it doesnt return null
+        if (PlayerController.Instance.getClosestEnemy().transform.position != null)
+        {
+            MyOwnLookAt(PlayerController.Instance.getClosestEnemy().transform);
+        }
         startPos = transform.position;
     }
 
@@ -46,21 +49,25 @@ public class Projectile : MonoBehaviour
         }
     }
 
-
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnHit(Collider other)
     {
-        if (collision.transform.CompareTag("Enemy"))
-        {
-            OnHit();
+    }
 
-            // deal damage
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("Enemy"))
+        {
+            OnHit(other);
         }
     }
 
-    public virtual void OnHit()
+    protected void MyOwnLookAt(Transform target)
     {
-        Debug.Log("hit an enemy");
-        Destroy(this.gameObject);
+        Vector3 _direction = target.position - transform.position;
 
+        Quaternion rotation = Quaternion.LookRotation(_direction);
+
+        transform.rotation = rotation;
     }
+
 }

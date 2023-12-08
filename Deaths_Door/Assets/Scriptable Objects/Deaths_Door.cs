@@ -71,6 +71,15 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EquipBomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""1784e1bb-5e79-4a75-97b3-c2a7ac06d360"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -214,6 +223,17 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MeleeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8ae2ec7-67ca-4f03-829a-da47743b706f"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EquipBomb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -862,6 +882,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         m_Player_EnterShootingMode = m_Player.FindAction("EnterShootingMode", throwIfNotFound: true);
         m_Player_EquipArrow = m_Player.FindAction("EquipArrow", throwIfNotFound: true);
         m_Player_EquipFireBall = m_Player.FindAction("EquipFireBall", throwIfNotFound: true);
+        m_Player_EquipBomb = m_Player.FindAction("EquipBomb", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -946,6 +967,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_EnterShootingMode;
     private readonly InputAction m_Player_EquipArrow;
     private readonly InputAction m_Player_EquipFireBall;
+    private readonly InputAction m_Player_EquipBomb;
     public struct PlayerActions
     {
         private @Deaths_Door m_Wrapper;
@@ -955,6 +977,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         public InputAction @EnterShootingMode => m_Wrapper.m_Player_EnterShootingMode;
         public InputAction @EquipArrow => m_Wrapper.m_Player_EquipArrow;
         public InputAction @EquipFireBall => m_Wrapper.m_Player_EquipFireBall;
+        public InputAction @EquipBomb => m_Wrapper.m_Player_EquipBomb;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -979,6 +1002,9 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @EquipFireBall.started += instance.OnEquipFireBall;
             @EquipFireBall.performed += instance.OnEquipFireBall;
             @EquipFireBall.canceled += instance.OnEquipFireBall;
+            @EquipBomb.started += instance.OnEquipBomb;
+            @EquipBomb.performed += instance.OnEquipBomb;
+            @EquipBomb.canceled += instance.OnEquipBomb;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -998,6 +1024,9 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
             @EquipFireBall.started -= instance.OnEquipFireBall;
             @EquipFireBall.performed -= instance.OnEquipFireBall;
             @EquipFireBall.canceled -= instance.OnEquipFireBall;
+            @EquipBomb.started -= instance.OnEquipBomb;
+            @EquipBomb.performed -= instance.OnEquipBomb;
+            @EquipBomb.canceled -= instance.OnEquipBomb;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1277,6 +1306,7 @@ public partial class @Deaths_Door: IInputActionCollection2, IDisposable
         void OnEnterShootingMode(InputAction.CallbackContext context);
         void OnEquipArrow(InputAction.CallbackContext context);
         void OnEquipFireBall(InputAction.CallbackContext context);
+        void OnEquipBomb(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

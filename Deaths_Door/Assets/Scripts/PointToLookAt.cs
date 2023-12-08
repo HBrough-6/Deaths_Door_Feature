@@ -7,13 +7,6 @@ using UnityEngine;
 // last modified 11/14/23
 // moves an object around the game based on where the mouse is on the screen
 
-/// <summary>
-/// To do:
-/// 
-/// Bugs:
-/// look point is restricted to a maximum but will not heed the minimum restraint
-/// </summary>
-
 public class PointToLookAt : MonoBehaviour
 {
     public Vector3 worldPosition;

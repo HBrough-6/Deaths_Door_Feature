@@ -6,19 +6,16 @@ using UnityEngine.InputSystem;
 
 // Brough, Heath
 // Created 11/9/23
-// last modified 12/1/23
+// last modified 12/6/23
 // handles the movement, shooting, and melee attacks of the player
-
-/*
- BUGS:
-    Swapping projectiles in the middle of shooting mode will disable both projectiles
- */
 
 enum AttackType
 {
     Empty = -1,
     Arrow = 2,
-    Fireball
+    Fireball,
+    Bomb,
+    Hookshot,
     
 }
 
@@ -28,7 +25,6 @@ public class PlayerController : MonoBehaviour
 
     private Transform objectToLookAt;
     private Vector3 posToLookAt;
-    public Quaternion ChildRot;
 
     Deaths_Door inputActions;
 
@@ -50,7 +46,15 @@ public class PlayerController : MonoBehaviour
     private bool meleeCharged = false;
 
     // tracks the last equipped projectile type
-    AttackType activeSpell = AttackType.Empty;
+    private AttackType activeSpell = AttackType.Empty;
+
+    // aimAssist cone reference
+    private GameObject aimAssistRef;
+
+    // how much mana the player has left
+    private int Mana = 4;
+
+    private int currentManaCost;
 
     // actions reference
     private Component playerInputComponent;
@@ -58,6 +62,11 @@ public class PlayerController : MonoBehaviour
     {
         inputActions = new Deaths_Door();
         inputActions.Enable();
+
+        // assign the reference to the object
+        aimAssistRef = transform.GetChild(0).gameObject;
+        // disable the cone until needed
+        aimAssistRef.SetActive(false);
 
         //                                     ActionMap     action
         // GetComponent<PlayerInput>().actions.actionMaps[0].actions[0].Disable();
@@ -72,18 +81,14 @@ public class PlayerController : MonoBehaviour
         // equips arrow as the first projectile
         currentSpell = FireArrow;
         activeSpell = AttackType.Arrow;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        currentManaCost = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
         rotatePlayer();
+        UIManager.Instance.AttackStatus(canShoot);
     }
 
     private void rotatePlayer()
@@ -94,6 +99,8 @@ public class PlayerController : MonoBehaviour
         // looks at the position to look at
         transform.LookAt(posToLookAt);
     }
+
+   
 
     // player enters shooting mode
     // player holds down mouse to charge up shot
@@ -115,6 +122,8 @@ public class PlayerController : MonoBehaviour
             GetComponent<PlayerInput>().actions.actionMaps[0].actions[0].Disable();
             // enter shooting mode
             inShootingMode = true;
+            //activate the cone
+            aimAssistRef.SetActive(true);
             Debug.Log("entered shooting mode");
 
 
@@ -126,13 +135,15 @@ public class PlayerController : MonoBehaviour
             // exit shooting mode and ensure the player cannot shoot
             inShootingMode = false;
             canShoot = false;
-            Debug.Log("exited shooting mode");
             // disable shooting
             GetComponent<PlayerInput>().actions.actionMaps[(int)activeSpell].Disable();
             // Enable attacking
             GetComponent<PlayerInput>().actions.actionMaps[0].actions[1].Enable();
             // Enable movement 
             GetComponent<PlayerInput>().actions.actionMaps[0].actions[0].Enable();
+            // deactivate the cone
+            aimAssistRef.SetActive(false);
+            Debug.Log("exited shooting mode");
         }
     }
 
@@ -145,7 +156,6 @@ public class PlayerController : MonoBehaviour
     {
         if (inShootingMode)
         {
-
             if (context.performed)
             {
                 // player successfully held down button for long enough and attack is ready
@@ -153,7 +163,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("attack ready");
             }
         
-            if (context.canceled && inShootingMode && canShoot)
+            if (context.canceled && inShootingMode && canShoot && Mana >= currentManaCost)
             {
                 // player released the button after charging attack
                 canShoot = false;
@@ -168,11 +178,10 @@ public class PlayerController : MonoBehaviour
             if (context.performed)
             {
                 SwingSword();
+                ManageMana(1);
             }
-            
         }
     }
-
 
     /// <summary>
     /// disables the last projectile that was equipped, skipping the disable if there was no previous projectile (lastProj = -1)
@@ -198,11 +207,22 @@ public class PlayerController : MonoBehaviour
             // if the arrow is not the current spell, equip it
             if (currentSpell != FireArrow)
             {
+                // change the cost for shooting
+                currentManaCost = 1;
+
+                // Reflect weapon selection change in the UI
+                UIManager.Instance.ChangeWeapon(1);
                 Debug.Log("equips arrow");
+
                 // disable the previous projectile type
                 DisableLastAttack((int)AttackType.Fireball);
+
+                // set the current spell
                 currentSpell = FireArrow;
                 activeSpell = AttackType.Arrow;
+
+                // enable the action Map for arrows
+                GetComponent<PlayerInput>().actions.actionMaps[(int)activeSpell].Enable();
             }
             else Debug.Log("arrow already equipped");
         }
@@ -219,14 +239,35 @@ public class PlayerController : MonoBehaviour
             // if the fireball is not the currentSpell, equip it
             if (currentSpell != FireFireball)
             {
+                // change the cost for shooting
+                currentManaCost = 1;
+
+                // Reflect weapon selection change in the UI
+                UIManager.Instance.ChangeWeapon(2);
                 Debug.Log("equips fireball");
+
                 // disable the previous projectile type
                 DisableLastAttack((int)AttackType.Arrow);
+
+                // set the current spell
                 currentSpell = FireFireball;
                 activeSpell = AttackType.Fireball;
+
+                // enable the action map for Fireballs
+                GetComponent<PlayerInput>().actions.actionMaps[(int)activeSpell].Enable();
             }
             else Debug.Log("fireball already equipped");
         }
+    } 
+
+    /// <summary>
+    /// returns the current closestEnemy, returns null if AimAssist is disabled
+    /// </summary>
+    /// <returns></returns>
+    public GameObject getClosestEnemy()
+    {
+        if (!aimAssistRef.activeSelf) return null;
+        return aimAssistRef.transform.GetComponent<AimAssist>().FindClosestEnemy(transform.position);
     }
 
     /*
@@ -238,7 +279,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void FireArrow()
     {
-
+        ManageMana(-1);
         Debug.Log("shoots arrow");
         Instantiate(ArrowPrefab, transform.position, transform.rotation);
     }
@@ -248,8 +289,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void FireFireball()
     {
-            Debug.Log("shoots fireball"); 
-                    //Instantiate(FireballPrefab, transform.position, transform.rotation);
+        ManageMana(-1);
+        Debug.Log("shoots fireball"); 
+        Instantiate(FireballPrefab, transform.position, transform.rotation);
     }
 
     /// <summary>
@@ -260,5 +302,22 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Swoosh");
     }
 
-    
+    public void ManageMana(int costOrGain)
+    {
+        Mana += costOrGain;
+        if (Mana < 0)
+        {
+            Mana = 0;
+        }
+        else if (Mana > 4)
+        {
+            Mana = 4;
+        }
+        UIManager.Instance.ManageManainUI();
+    }
+
+    public int ManageMana()
+    {
+        return Mana;
+    }
 }
